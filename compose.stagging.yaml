@@ -97,4 +97,7 @@ volumes:
 secrets:
   db-password:
     file: .secrets/db/password-stagging.txt
-
+networks:
+  default:
+    driver: bridge
+    name: oysirs-stagging-network
