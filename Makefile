@@ -35,6 +35,51 @@ collectstatic-dev:
 	@echo "Collecting static files on service `backend`"
 	docker compose -f compose.dev.yaml exec backend python manage.py collectstatic --noinput
 
+ssl-generate-dev:
+	@echo "Generating SSL certificates with Certbot"
+	docker compose -f compose.stagging.yaml exec certbot certbot certonly --webroot --webroot-path=/var/lib/letsencrypt -d localhost
+
+
+# stagging Targets
+start-stagging:
+	@echo "Starting stagging containers"
+	docker compose -f compose.stagging.yaml up -d
+
+stop-stagging:
+	@echo "Stopping stagging containers"
+	docker compose -f compose.stagging.yaml down
+
+restart-stagging:
+	@echo "Restarting stagging containers"
+	docker compose -f compose.stagging.yaml down && docker compose -f compose.stagging.yaml up -d
+
+build-stagging:
+	@echo "Building stagging containers"
+	docker compose -f compose.stagging.yaml up --build -d
+
+logs-stagging:
+	@echo "Viewing stagging logs"
+	docker compose -f compose.stagging.yaml logs -f
+
+exec-stagging:
+	@echo "Executing shell in stagging service (replace <service> with your service name)"
+	docker compose -f compose.stagging.yaml exec <service> sh
+
+ps-stagging:
+	@echo "Listing running stagging containers"
+	docker compose -f compose.stagging.yaml ps
+
+prune-stagging:
+	@echo "Cleaning up unused stagging containers, networks, images, and volumes"
+	docker system prune -f && docker volume prune -f
+
+collectstatic-stagging:
+	@echo "Collecting static files on service `backend`"
+	docker compose -f compose.stagging.yaml exec backend python manage.py collectstatic --noinput
+
+ssl-generate-stagging:
+	@echo "Generating SSL certificates with Certbot"
+	docker compose -f compose.stagging.yaml exec certbot certbot certonly --webroot --webroot-path=/var/lib/letsencrypt -d `<domain name>
 
 # Production Targets
 start:
@@ -72,3 +117,9 @@ prune:
 collectstatic:
 	@echo "Collecting static files on service `backend`"
 	docker compose -f compose.yaml exec backend python manage.py collectstatic --noinput
+
+
+# General Targets
+dummy-cert:
+	@echo "Generating dummy SSL certificates for local development"
+	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./nginx/certs/dummy-key.pem -out ./nginx/certs/dummy-cert.pem -subj "//CN=localhost"
