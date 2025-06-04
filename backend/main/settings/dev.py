@@ -206,7 +206,7 @@ EMAIL_TIMEOUT = 30  # 30 seconds timeout for email sending
 OTP_EXPIRATION_TIME = 300  # 5 minutes
 
 # Logging settings
-LOG_DIR = BASE_DIR / 'logs'
+LOG_DIR = BASE_DIR / '.logs'
 if not LOG_DIR.exists():
     LOG_DIR.mkdir()
 
@@ -230,7 +230,7 @@ LOGGING = {
         },
         'file': {
             'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'logs/django.log',  # Log file path
+            'filename': LOG_DIR / 'django.log',  # Log file path
             'formatter': 'verbose',
         },
     },
