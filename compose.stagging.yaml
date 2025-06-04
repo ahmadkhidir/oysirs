@@ -8,8 +8,10 @@ services:
       && python manage.py migrate
       && daphne main.asgi:application -b 0.0.0.0 -p 8000"
     restart: unless-stopped
-    expose:
-      - 8000
+    # expose:
+    #   - 8000
+    ports:
+      - 8000:8000
     volumes:
       - ./backend:/app
     env_file:
