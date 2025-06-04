@@ -44,6 +44,9 @@ COPY . .
 # Collect static files
 RUN python manage.py collectstatic --clear --noinput
 
+# Ensure the logs directory is owned by the app user
+RUN chown -R appuser:appuser /app/.logs
+
 # Switch to the non-privileged user to run the application.
 USER appuser
 
