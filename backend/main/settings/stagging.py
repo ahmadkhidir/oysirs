@@ -16,4 +16,7 @@ DATABASES = {
     }
 }
 
-# CORS settings
+CSRF_TRUSTED_ORIGINS = [
+    'http://207.154.192.71',  # Add your server's IP address
+    'http://localhost',       # Add localhost for local testing
+]
