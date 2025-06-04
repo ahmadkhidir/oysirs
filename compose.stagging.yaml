@@ -53,7 +53,7 @@ services:
     volumes:
       - ./backend:/app
     env_file:
-      - .env_file/dev.env
+      - .env_file/stagging.env
     depends_on:
       - redis
 
@@ -65,7 +65,7 @@ services:
     volumes:
       - ./backend:/app
     env_file:
-      - .env_file/dev.env
+      - .env_file/stagging.env
     depends_on:
       - redis
   nginx:
