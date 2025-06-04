@@ -38,12 +38,15 @@ INSTALLED_APPS = [
     # Local apps
     'accounts',
     'api_auth',
+    'banks',
     # Third-party packages
     'corsheaders',
     'daphne',
     'drf_yasg',
     'rest_framework',
     'nested_admin',
+    'django_celery_results',
+    'django_celery_beat',
     # Platform packages
     'django.contrib.admin',
     'django.contrib.auth',
@@ -129,7 +132,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Lagos'
 
 USE_I18N = True
 
@@ -155,7 +158,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication'
+        'rest_framework.authentication.SessionAuthentication',
     ),
 }
 
@@ -234,7 +237,7 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console', 'file'],  # Add the file handler here
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
     },
 }
@@ -242,3 +245,15 @@ LOGGING = {
 # Frontend settings
 FRONTEND_PASSWORD_RESET_URL = os.getenv("FRONTEND_PASSWORD_RESET_URL", "http://localhost:3000/reset-password")
 FRONTEND_VERIFY_EMAIL_URL = os.getenv("FRONTEND_VERIFY_EMAIL_URL", "http://localhost:3000/verify-email")
+
+
+# Celery settings
+CELERY_BROKER_URL = 'redis://redis:6379/0'  # Use Redis as the message broker
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = None
+CELERY_TASK_SOFT_TIME_LIMIT = None
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_BROKER_CONNECTION_TIMEOUT = 10  # 10 seconds timeout for broker connection
+CELERY_BROKER_CONNECTION_MAX_RETRIES = 5  # Retry up to 5 times

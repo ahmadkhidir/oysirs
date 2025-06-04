@@ -1,19 +1,17 @@
 from rest_framework import serializers
-from .models import User, PhoneNumber, GoogleAccount, StakeholderAccount, GovIssuedIdentity
+from .models import User, PhoneNumber
 
 
 class UserSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(source='get_full_name', read_only=True)
-    has_google_account = serializers.BooleanField(read_only=True)
     has_phone_number = serializers.BooleanField(read_only=True)
     phone_number = serializers.CharField(
         source='get_phone_number', read_only=True, allow_null=True)
-    is_stakeholder = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = User
         fields = ['id', 'full_name', 'email', 'is_active', 'date_joined',
-                  'last_login', 'has_google_account', 'has_phone_number', 'phone_number', 'is_stakeholder']
+                  'last_login', 'has_phone_number', 'phone_number']
         read_only_fields = ['id', 'date_joined', 'last_login', 'is_active']
 
     def get_phone_number(self, obj):

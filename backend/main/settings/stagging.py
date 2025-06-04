@@ -3,7 +3,7 @@ from main.settings.dev import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 DATABASES = {
     'default': {

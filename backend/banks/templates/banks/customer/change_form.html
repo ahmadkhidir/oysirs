@@ -1,0 +1,28 @@
+{% extends "admin/change_form.html" %}
+
+{% block content %}
+<div class="filters">
+    <form method="get" style="display: flex; flex-flow: row wrap; gap: 5px 10px; margin-bottom: 16px;">
+        {% for key, value in request.GET.items %}
+            {% if key != 'from_date' and key != 'to_date' %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+            {% endif %}
+        {% endfor %}
+        {% for key, value in request.GET.items %}
+            {% if key != 'from_date' and key != 'to_date' %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+            {% endif %}
+        {% endfor %}
+        <div>
+            <label for="from_date">From Date:</label>
+            <input type="date" id="from_date" name="from_date" value="{{ from_date }}">
+        </div>
+        <div>
+            <label for="to_date">To Date:</label>
+            <input type="date" id="to_date" name="to_date" value="{{ to_date }}">
+        </div>
+        <button type="submit" class="button">Filter</button>
+    </form>
+</div>
+{{ block.super }}
+{% endblock %}

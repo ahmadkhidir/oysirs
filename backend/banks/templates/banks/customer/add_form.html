@@ -1,0 +1,7 @@
+{% extends "admin/change_form.html" %}
+{% block content %}
+<div style="margin-top: 20px; margin-bottom: 20px;">
+    <a href="{% url 'admin:upload_records' %}" style="color: var(--accent);text-decoration: underline;">Upload Transactions From Spreadsheet</a>
+</div>
+{{ block.super }}
+{% endblock %}

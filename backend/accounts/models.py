@@ -48,6 +48,7 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(_("email address"), unique=True)
     email_verified = models.BooleanField(_("email verified"), default=False, help_text=_("Designates whether the email has been verified."))
+
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
@@ -58,22 +59,10 @@ class User(AbstractUser):
         verbose_name = _("User")
         verbose_name_plural = _("Users")
 
-    def has_google_account(self):
-        try:
-            return self.google_account is not None
-        except User.google_account.RelatedObjectDoesNotExist:
-            return False
-
     def has_phone_number(self):
         try:
             return self.phone_number is not None and self.phone_number.is_verified
         except User.phone_number.RelatedObjectDoesNotExist:
-            return False
-
-    def is_stakeholder(self):
-        try:
-            return self.stakeholder_account is not None
-        except User.stakeholder_account.RelatedObjectDoesNotExist:
             return False
 
 
@@ -158,42 +147,3 @@ class PhoneNumber(TimeStampedBaseModel):
         verbose_name = _("Phone Number")
         verbose_name_plural = _("Phone Numbers")
 
-
-class StakeholderAccount(TimeStampedBaseModel):
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name="stakeholder_account")
-    is_verified = models.BooleanField(default=False)
-
-
-def upload_identity_image(instance, filename: str):
-    # Use the user's ID and the original filename to create a unique path
-    root, ext = os.path.splitext(filename)
-    # support only 1 upload/stakeholders
-    return f"identities/{instance.user.email}.{ext}"
-
-
-class GovIssuedIdentity(TimeStampedBaseModel):
-    IDENTITY_CHOICES = (
-        ('bvn', 'BVN'),
-        ('nin', 'NIN'),
-        ('national_passport', 'National Passport')
-    )
-    type = models.CharField(
-        _("Identity Type"), max_length=50, choices=IDENTITY_CHOICES)
-    image = models.ImageField(
-        _("Identity Shot"),
-        upload_to=upload_identity_image,
-        max_length=255
-    )
-    stakeholder = models.OneToOneField(
-        StakeholderAccount, on_delete=models.CASCADE, related_name="identity")
-    
-    class Meta:
-        verbose_name = _("Gov Issued Identity")
-        verbose_name_plural = _("Gov Issued Identities")
-
-
-class GoogleAccount(TimeStampedBaseModel):
-    google_id = models.CharField(max_length=255, unique=True)
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name="google_account")
