@@ -16,7 +16,12 @@ DATABASES = {
     }
 }
 
-CSRF_TRUSTED_ORIGINS = [
+CORS_ALLOWED_ORIGINS = [
     'http://207.154.192.71',  # Add your server's IP address
     'http://localhost',       # Add localhost for local testing
 ]
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
