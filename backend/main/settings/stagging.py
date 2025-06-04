@@ -15,3 +15,6 @@ DATABASES = {
         'PORT': os.environ.get('DB_PORT'),
     }
 }
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
