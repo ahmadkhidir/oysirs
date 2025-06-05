@@ -70,6 +70,7 @@ services:
       - .env_file/stagging.env
     depends_on:
       - redis
+      - backend
   nginx:
     # build:
     #   context: ./nginx

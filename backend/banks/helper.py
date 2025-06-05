@@ -19,7 +19,8 @@ def get_cell_value(row: pd.Series, column: str | None):
 
 
 def upload_records(
-        mapping: dict
+        mapping: dict,
+        task=None,  # Optional: task for tracking progress
 ):
     # task = BackgroundTaskRepository.create_task(
     #     session,
@@ -29,6 +30,7 @@ def upload_records(
     #         description=f"Create transactions from uploaded file ({file['name']})",
     #     )
     # )
+    errors = []
     file = mapping["file"]
 
     try:
@@ -57,6 +59,17 @@ def upload_records(
         # task.description = f"Create transactions from uploaded file ({file['name']}) for ({bank.name}) bank"
         # task.result = f"0|{count}/{len(df)}"
         # session.commit()
+        if task:
+            task.update_state(
+                state='STARTED',
+                meta={
+                    'processed': count,
+                    'current': 0,
+                    'total': len(df),
+                    'status': f"Processing {file['name']} for {bank.name} bank (0)%",
+                    'errors': errors,
+                }
+            )
         for index, row in df.iterrows():
             bvn = get_cell_value(row, mapping['customer_bvn'])
             nuban = get_cell_value(row, mapping['customer_nuban'])
@@ -141,12 +154,26 @@ def upload_records(
                     )
                 count += 1
             except Exception as e:
-                pass
+                errors.append({
+                    'row': index + 1,
+                    'error': str(e),
+                })
             #     logger.error(f"{file['name']}: {date} -> {e}")
             #     task.error = f"{task.error}\n\n{e}: {str(row)}".strip()
             #     session.commit()
             # task.result = f"{count}|{index+1}/{len(df)}"
             # session.commit()
+            if task:
+                task.update_state(
+                    state='STARTED',
+                    meta={
+                        'processed': count,
+                        'current': index + 1,
+                        'total': len(df),
+                        'status': f"Processing {file['name']} for {bank.name} bank ({(index + 1) * 100 // len(df)}%)",
+                        'errors': errors,
+                    }
+                )
     except Exception as e:
         # logger.error(f"{e}")
         # task.error = f"{task.error}\n\n{e}".strip()
@@ -155,4 +182,15 @@ def upload_records(
         raise e
     # task.status = BackgroundTaskStatus.completed
     # session.commit()
+    if task:
+        task.update_state(
+            state='SUCCESS',
+            meta={
+                'processed': count,
+                'current': len(df),
+                'total': len(df),
+                'status': f"Completed processing {file['name']} for {bank.name} bank ({100}%)",
+                'errors': errors,
+            }
+        )
     return count
