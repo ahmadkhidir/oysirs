@@ -2,7 +2,7 @@ from celery import shared_task
 from django.utils import timezone
 
 
-@shared_task(name="upload_records")
+@shared_task(name="upload_records_task")
 def upload_records_task(mapping: dict):
     """
     This function is a Celery task that uploads records to the database.

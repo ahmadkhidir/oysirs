@@ -48,7 +48,6 @@ admin.site.register([
     models.CustomerTIN,
     models.CustomerPassport,
     models.Bank,
-    models.BankTransaction,
 ])
 
 
@@ -186,6 +185,25 @@ class BankTransactionInline(nested_admin.NestedTabularInline):
     fieldsets = (
         (None, {
             "fields": (
+                "transaction_type",
+                "amount",
+                "date",
+                "narration",
+                "bank",
+            ),
+        }),
+    )
+
+
+@admin.register(models.BankTransaction)
+class BankTransactionAdmin(nested_admin.NestedModelAdmin):
+    list_display = ("amount", "date", "bank", "transaction_type")
+    list_filter = ("transaction_type", "bank__name")
+    search_fields = ("narration", "bank__name")
+    fieldsets = (
+        (None, {
+            "fields": (
+                "customer",
                 "transaction_type",
                 "amount",
                 "date",

@@ -146,7 +146,7 @@ class BankTransaction(models.Model):
         ('credit', 'Credit'),
         ('debit', 'Debit'),
     ]
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=20, decimal_places=2)
     transaction_type = models.CharField(
         max_length=6, choices=TRANSACTION_TYPE_CHOICES, default=None, null=True, blank=True)
     narration = models.TextField(null=True, blank=True)
