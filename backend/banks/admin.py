@@ -369,7 +369,7 @@ class CustomerAdmin(nested_admin.NestedModelAdmin, admin.ModelAdmin):
                 cleaned_data["file"] = file_object
                 cleaned_data["bank_name"] = cleaned_data["bank_name"].name
                 upload_records_task.delay_on_commit(cleaned_data)
-                messages.success(request, "File uploading started. Check the Task results section for updates.")
+                messages.success(request, "Task uploading started. Check the Task results section for updates.")
             else:
                 messages.error(request, "Error in form submission.")
             return HttpResponseRedirect(request.path)
