@@ -52,6 +52,11 @@ class CustomerName(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['name', 'customer'], name='unique_name_customer')
+        ]
 
 
 class CustomerAddress(models.Model):
@@ -64,6 +69,11 @@ class CustomerAddress(models.Model):
 
     def __str__(self):
         return self.address
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['address', 'customer'], name='unique_address_customer')
+        ]
 
 
 class CustomerNUBAN(models.Model):
@@ -76,6 +86,11 @@ class CustomerNUBAN(models.Model):
 
     def __str__(self):
         return self.nuban
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['nuban', 'customer'], name='unique_nuban_customer')
+        ]
 
 
 class CustomerMobile(models.Model):
@@ -88,6 +103,11 @@ class CustomerMobile(models.Model):
 
     def __str__(self):
         return self.mobile
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['mobile', 'customer'], name='unique_mobile_customer')
+        ]
 
 
 class CustomerBVN(models.Model):
@@ -100,6 +120,11 @@ class CustomerBVN(models.Model):
 
     def __str__(self):
         return self.bvn
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['bvn', 'customer'], name='unique_bvn_customer')
+        ]
 
 
 class CustomerEmail(models.Model):
@@ -112,6 +137,11 @@ class CustomerEmail(models.Model):
 
     def __str__(self):
         return self.email
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['email', 'customer'], name='unique_email_customer')
+        ]
 
 
 class CustomerTIN(models.Model):
@@ -124,6 +154,11 @@ class CustomerTIN(models.Model):
 
     def __str__(self):
         return self.tin
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['tin', 'customer'], name='unique_tin_customer')
+        ]
 
 
 class CustomerPassport(models.Model):
@@ -136,6 +171,11 @@ class CustomerPassport(models.Model):
 
     def __str__(self):
         return self.passport
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['passport', 'customer'], name='unique_passport_customer')
+        ]
 
 
 class BankTransaction(models.Model):
