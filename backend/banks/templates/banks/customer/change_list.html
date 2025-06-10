@@ -1,19 +1,24 @@
 {% extends "admin/change_list.html" %}
 
-{% block content %}
-<div class="filters">
+{% block search %}
+<div class="search-container">
     <form method="get">
         {% for key, value in request.GET.items %}
-            {% if key != 'from_date' and key != 'to_date' %}
+            {% if key != 'q' and key != 'search_field' %}
                 <input type="hidden" name="{{ key }}" value="{{ value }}">
             {% endif %}
         {% endfor %}
-        <label for="from_date">From Date:</label>
-        <input type="date" id="from_date" name="from_date" value="{{ from_date }}">
-        <label for="to_date">To Date:</label>
-        <input type="date" id="to_date" name="to_date" value="{{ to_date }}">
-        <button type="submit" class="button">Filter</button>
+        <select name="search_field">
+            <option value="">Select Search Field</option>
+            <option value="name" {% if request.GET.search_field == "name" %}selected{% endif %}>Name</option>
+            <option value="email" {% if request.GET.search_field == "email" %}selected{% endif %}>Email</option>
+            <option value="mobile" {% if request.GET.search_field == "mobile" %}selected{% endif %}>Mobile</option>
+            <option value="bvn" {% if request.GET.search_field == "bvn" %}selected{% endif %}>BVN</option>
+            <option value="nuban" {% if request.GET.search_field == "nuban" %}selected{% endif %}>NUBAN</option>
+            <option value="tin" {% if request.GET.search_field == "tin" %}selected{% endif %}>TIN</option>
+        </select>
+        <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search...">
+        <button type="submit" class="button">Search</button>
     </form>
 </div>
-{{ block.super }}
 {% endblock %}

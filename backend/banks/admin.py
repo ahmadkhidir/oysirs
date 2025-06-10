@@ -214,6 +214,32 @@ class BankTransactionAdmin(nested_admin.NestedModelAdmin):
     )
 
 
+class SearchFieldFilter(admin.SimpleListFilter):
+    title = "Search Field"
+    parameter_name = "search_field"
+
+    def lookups(self, request, model_admin):
+        # Define the base search fields
+        lookups = [
+            ("name", "Name"),
+            ("email", "Email"),
+            ("mobile", "Mobile"),
+        ]
+
+        # Add additional fields based on user permissions
+        if request.user.has_perm("banks.view_customerbvn"):
+            lookups.append(("bvn", "BVN"))
+        if request.user.has_perm("banks.view_customernuban"):
+            lookups.append(("nuban", "NUBAN"))
+        if request.user.has_perm("banks.view_customertin"):
+            lookups.append(("tin", "TIN"))
+
+        return lookups
+
+    def queryset(self, request, queryset):
+        # This filter doesn't modify the queryset directly
+        return queryset
+
 @admin.register(models.Customer)
 class CustomerAdmin(nested_admin.NestedModelAdmin, admin.ModelAdmin):
     add_form_template = "banks/customer/add_form.html"
@@ -236,6 +262,8 @@ class CustomerAdmin(nested_admin.NestedModelAdmin, admin.ModelAdmin):
         # BankTransactionInline,
     ]
 
+    list_filter = [SearchFieldFilter]  # Add the custom filter
+
     def get_fieldsets(self, request, obj = ...):
         if obj is None:
             return ()
@@ -251,18 +279,37 @@ class CustomerAdmin(nested_admin.NestedModelAdmin, admin.ModelAdmin):
         self.request = request  # Store the request object for use in other methods
         return super().change_view(request, object_id, form_url, extra_context=extra_context)
     
+    # def get_search_fields(self, request):
+    #     """
+    #     Dynamically set search_fields based on user permissions.
+    #     """
+    #     search_fields = ["names__name", "emails__email", "mobiles__mobile"]
+    #     if request.user.has_perm("banks.view_customerbvn"):
+    #         search_fields.append("bvns__bvn")
+    #     if request.user.has_perm("banks.view_customernuban"):
+    #         search_fields.append("nubans__nuban")
+    #     if request.user.has_perm("banks.view_customertin"):
+    #         search_fields.append("tins__tin")
+    #     return search_fields
+
     def get_search_fields(self, request):
         """
-        Dynamically set search_fields based on user permissions.
+        Dynamically set search_fields based on the selected search field type.
         """
-        search_fields = ["names__name", "emails__email", "mobiles__mobile"]
-        if request.user.has_perm("banks.view_customerbvn"):
-            search_fields.append("bvns__bvn")
-        if request.user.has_perm("banks.view_customernuban"):
-            search_fields.append("nubans__nuban")
-        if request.user.has_perm("banks.view_customertin"):
-            search_fields.append("tins__tin")
-        return search_fields
+        search_field = request.GET.get("search_field", None)
+        if search_field == "name":
+            return ["names__name"]
+        elif search_field == "email":
+            return ["emails__email"]
+        elif search_field == "mobile":
+            return ["mobiles__mobile"]
+        elif search_field == "bvn":
+            return ["bvns__bvn"]
+        elif search_field == "nuban":
+            return ["nubans__nuban"]
+        elif search_field == "tin":
+            return ["tins__tin"]
+        return []  # Default to no search fields if none is selected
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
