@@ -6,7 +6,7 @@ services:
     command: >
       sh -c "python manage.py migrate
       && python manage.py collectstatic --noinput 
-      && daphne main.asgi:application -b 0.0.0.0 -p 8000"
+      && daphne main.asgi:application -b 0.0.0.0 -p 8000 --application-close-timeout 300"
     restart: unless-stopped
     expose:
       - 8000

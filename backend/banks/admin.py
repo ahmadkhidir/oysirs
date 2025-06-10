@@ -264,6 +264,10 @@ class CustomerAdmin(nested_admin.NestedModelAdmin, admin.ModelAdmin):
             search_fields.append("tins__tin")
         return search_fields
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.prefetch_related('names', 'bvns', 'nubans', 'emails', 'mobiles', 'tins')
+
     def get_list_display(self, request):
         """
         Dynamically set list_display based on user permissions.

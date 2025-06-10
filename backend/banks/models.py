@@ -46,7 +46,7 @@ class CustomerName(models.Model):
     """
     CustomerName model class
     """
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, db_index=True)
     customer = models.ForeignKey(
         Customer, related_name='names', on_delete=models.CASCADE)
 
@@ -70,7 +70,7 @@ class CustomerNUBAN(models.Model):
     """
     CustomerNUBAN model class
     """
-    nuban = models.CharField(max_length=10)
+    nuban = models.CharField(max_length=10, db_index=True)
     customer = models.ForeignKey(
         Customer, related_name='nubans', on_delete=models.CASCADE)
 
@@ -82,7 +82,7 @@ class CustomerMobile(models.Model):
     """
     CustomerMobile model class
     """
-    mobile = models.CharField(max_length=15)
+    mobile = models.CharField(max_length=15, db_index=True)
     customer = models.ForeignKey(
         Customer, related_name='mobiles', on_delete=models.CASCADE)
 
@@ -94,7 +94,7 @@ class CustomerBVN(models.Model):
     """
     CustomerBVN model class
     """
-    bvn = models.CharField(max_length=11)
+    bvn = models.CharField(max_length=11, db_index=True)
     customer = models.ForeignKey(
         Customer, related_name='bvns', on_delete=models.CASCADE)
 
@@ -106,7 +106,7 @@ class CustomerEmail(models.Model):
     """
     CustomerEmail model class
     """
-    email = models.EmailField()
+    email = models.EmailField(db_index=True)
     customer = models.ForeignKey(
         Customer, related_name='emails', on_delete=models.CASCADE)
 
@@ -118,7 +118,7 @@ class CustomerTIN(models.Model):
     """
     CustomerTIN model class
     """
-    tin = models.CharField(max_length=15)
+    tin = models.CharField(max_length=15, db_index=True)
     customer = models.ForeignKey(
         Customer, related_name='tins', on_delete=models.CASCADE)
 
@@ -130,7 +130,7 @@ class CustomerPassport(models.Model):
     """
     CustomerPassport model class
     """
-    passport = models.CharField(max_length=20)
+    passport = models.CharField(max_length=20, db_index=True)
     customer = models.ForeignKey(
         Customer, related_name='passports', on_delete=models.CASCADE)
 
