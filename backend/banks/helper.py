@@ -396,6 +396,7 @@ def upload_records(
 
             customer = None
             try:
+                # Identities to populate customer
                 db_email = models.CustomerEmail.objects.filter(
                     email__in=email).first() if email else None
                 if db_email:
@@ -423,13 +424,14 @@ def upload_records(
                     customer = db_nuban.customer
                     update_all(customer)
                     raise
-
-                db_tin = models.CustomerTIN.objects.filter(
-                    tin__in=tin).first() if tin else None
-                if db_tin:
-                    customer = db_tin.customer
-                    update_all(customer)
-                    raise
+                
+                # There has been issue with TINs (not stable), so we are not using it for now
+                # db_tin = models.CustomerTIN.objects.filter(
+                #     tin__in=tin).first() if tin else None
+                # if db_tin:
+                #     customer = db_tin.customer
+                #     update_all(customer)
+                #     raise
                 
                 db_passport = models.CustomerPassport.objects.filter(
                     passport__in=passport).first() if passport else None
@@ -443,7 +445,11 @@ def upload_records(
             else:
                 if not customer:
                     customer = models.Customer.objects.create()
-                    update_all(customer)
+                    if email or mobile or bvn or nuban or passport: # Add `tin` when stable
+                        update_all(customer)
+                    else:
+                        # If no identities, write to a log file
+                        pass
 
             try:
                 with transaction.atomic():
