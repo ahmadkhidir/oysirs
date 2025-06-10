@@ -80,7 +80,7 @@ class CustomerNUBAN(models.Model):
     """
     CustomerNUBAN model class
     """
-    nuban = models.CharField(max_length=10, db_index=True)
+    nuban = models.CharField(max_length=100, db_index=True)
     customer = models.ForeignKey(
         Customer, related_name='nubans', on_delete=models.CASCADE)
 
@@ -97,7 +97,7 @@ class CustomerMobile(models.Model):
     """
     CustomerMobile model class
     """
-    mobile = models.CharField(max_length=15, db_index=True)
+    mobile = models.CharField(max_length=100, db_index=True)
     customer = models.ForeignKey(
         Customer, related_name='mobiles', on_delete=models.CASCADE)
 
@@ -114,7 +114,7 @@ class CustomerBVN(models.Model):
     """
     CustomerBVN model class
     """
-    bvn = models.CharField(max_length=11, db_index=True)
+    bvn = models.CharField(max_length=100, db_index=True)
     customer = models.ForeignKey(
         Customer, related_name='bvns', on_delete=models.CASCADE)
 
@@ -148,7 +148,7 @@ class CustomerTIN(models.Model):
     """
     CustomerTIN model class
     """
-    tin = models.CharField(max_length=15, db_index=True)
+    tin = models.CharField(max_length=100, db_index=True)
     customer = models.ForeignKey(
         Customer, related_name='tins', on_delete=models.CASCADE)
 
@@ -165,7 +165,7 @@ class CustomerPassport(models.Model):
     """
     CustomerPassport model class
     """
-    passport = models.CharField(max_length=20, db_index=True)
+    passport = models.CharField(max_length=100, db_index=True)
     customer = models.ForeignKey(
         Customer, related_name='passports', on_delete=models.CASCADE)
 
